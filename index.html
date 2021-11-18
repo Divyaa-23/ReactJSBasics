@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Hello, world</title>
+    <!-- 1st link--link to react lib, current react package, 2nd-- react DOM, 3rd--babel -translates JSX(browser does not understand JSX) to JS -->
+    <script
+      crossorigin
+      src="https://unpkg.com/react@17/umd/react.development.js"
+    ></script>
+    <script
+      crossorigin
+      src="https://unpkg.com/react-dom@17/umd/react-dom.development.js"
+    ></script>
+    <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="text/babel">
+      //STEPS
+      //render takes 2 arg --> what element and where
+      //JSX code (extension of JS , insert snippets of html into JS)
+
+      //1.include CDN links for React,React-DOM and Babel in the head
+      //2.create a div with id root in the body
+      //3.create a script element with type="text/babel" in the body
+      //4.call ReactDOM.render() with 2 arg: the element/component you want to render, and the DOM element( root) where you want to render it.
+
+      //React components are like JS func.They take an arg called "props" (an obj),and return a JSX element that describes what the user should see.
+      //Function Components
+      /*  function Hi(props){
+                return <h1>Hi, {props.name}!</h1>; //prop can be changed...var name
+            } */
+
+      //Class Components
+      /* class Hi extends React.Component{
+
+                render(){
+                    return <h1>Hi,{this.props.num}! </h1> //has to be props, keyword
+                }
+            }
+            ReactDOM.render(
+                //<Hi name='Jordan'/>,
+                <Hi num='122'/>,
+                document.getElementById('root')
+            ); */
+      //1. We call ReactDOM.render() with the <Hi name='Jordan'/> component as an arg
+      //2. React calls the Hi component with {name:'Jordan'} as props obj
+      //3. the Hi component returns a <h1>Hi,Jordan!</h1> as the result
+      //4. ReactDOM updates the DOM to match this element
+
+      /* 
+      function Name(props) {
+          //this does not work bec props is immutable (read-only)
+          //props.name =props.name.toUpperCase(); 
+         //return <h1>Hi, {props.name}!</h1>; 
+          let name=props.name;
+          return <h1>Hi, {name.toUpperCase()}!</h1>;
+
+
+      }
+
+
+            ReactDOM.render(
+                //<Hi name='Jordan'/>,
+                <Name name='Pete Hunt'/>,
+                document.getElementById('root')
+            ); */
+      //Task 1: rewrite this using class-based components.
+
+      /*  class Name extends React.Component {
+        render() {
+          return <h1>Hi,{this.props.name.toUpperCase()}!</h1>;
+        }
+      } */
+      /*   ReactDOM.render(
+        <Name name="pete hunt" />,
+        document.getElementById("root")
+      ); */
+      //Task 2: nest the Name component inside an App component and render the App component.
+      /*            function NameApp(props) {
+        return <h1>Hello, {props.name}</h1>;
+      }
+      function App() {
+        return (
+          <section>
+            <NameApp name="Sara" />
+            
+            <Name name="pete" />
+          </section>
+        );
+      }  */
+      /*  class App extends React.Component {
+        render() {
+          return (
+            <section>
+              <Name name="Sara" />
+              <Name name="Tommy" />
+              <Name name="pete" />
+            </section>
+          );
+        }
+      } 
+
+      ReactDOM.render(<App />, document.getElementById("root")); */
+      class Hello extends React.Component {
+        //Methods in class body have no function keyword
+        handleClick = () => {
+          alert("Hi " + this.props.name);
+        }
+        render() {
+          return (
+            <div>
+              <h1>Greet {this.props.name} </h1>
+              <button onClick={this.handleClick}>Say Hi!</button>
+            </div>
+          )
+        }
+      }
+      class App extends React.Component {
+        render() {
+          return (
+            <div>
+              <Hello name="Tom" />
+              <Hello name="Tim" />
+              <Hello name="Tina" />
+            </div>
+          );
+        }
+      }
+      
+      ReactDOM.render(<App />, document.getElementById("root"));
+      /* const name = "Jordan Walke";
+            function getFullName(userObject) {
+              return userObject.firstName + " " + userObject.lastName;
+            }
+            const user = {
+              firstName: "Jordan",
+              lastName: "Walke",
+            };
+            /*     const element = <h1>Hello, {name}!</h1>; */
+      /* const element = (
+              <div>
+                <h1>Hello, {getFullName(user)}!</h1>,
+                <p>Some Text</p>
+              </div>
+            ); */
+      //you will only use one react render method , put multiple elements nested inside it
+      /* ReactDOM.render(
+              /* <h1>Hello,World!</h1>, */
+      /*     element, //what? element you want to render
+              document.getElementById("root") //where? */
+      /* );  */
+      //task 1: display a paragraph under h1 element
+    </script>
+  </body>
+</html>
