@@ -14,6 +14,12 @@
       src="https://unpkg.com/react-dom@17/umd/react-dom.development.js"
     ></script>
     <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css"
+      integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3"
+      crossorigin="anonymous"
+    />
   </head>
   <body>
     <div id="root"></div>
@@ -25,50 +31,96 @@
             input: "",
             withdraw: "",
             deposit: "",
-            count:parseInt(localStorage.getItem("count"))
+            balance: 0,
           };
+
           this.deposit = this.deposit.bind(this);
           this.withdraw = this.withdraw.bind(this);
         }
-        increment = () => {
-          this.setState((state) => ({
-            /*       console.log(this.state.deposit)
-            if(this.state.deposit===""){
-                  count:state.count
-              }
-              else{ */
+        //to fetch value from localStorage
+        componentDidMount() {
+          const balance = localStorage.getItem("balance");
+          if (balance != null) {
+            this.setState({
+              balance: parseInt(balance),
+            });
+          }
+        }
 
-            count: state.count + parseInt(this.state.deposit),
-          }));
-          localStorage.setItem("count",this.state.count+parseInt(this.state.deposit));
-          
+        increment = () => {
+          //to prevent empty form submission
+          if (!(this.state.deposit === "")) {
+            this.setState((state) => ({
+              balance: state.balance + parseInt(this.state.deposit),
+            }));
+            localStorage.setItem(
+              "balance",
+              this.state.balance + parseInt(this.state.deposit)
+            );
+          } else {
+            alert("Input field cannot be empty!!!");
+          }
         };
 
         decrement = () => {
-          this.setState((state) => ({
-            
-            count: state.count - parseInt(this.state.withdraw),
-          }));
+          if (!(this.state.withdraw === "")) {
+            this.setState((state) => ({
+              balance: state.balance - parseInt(this.state.withdraw),
+            }));
+            localStorage.setItem(
+              "balance",
+              this.state.balance - parseInt(this.state.withdraw)
+            );
+          } else {
+            alert("Input field cannot be Empty!!!");
+          }
         };
         deposit(event) {
-          this.setState({
-            deposit: event.target.value,
-          });
+          let e = event.target.value;
+
+          if (e === "" || Number(e)) {
+            this.setState({
+              deposit: e,
+            });
+          }
         }
         withdraw(event) {
-          this.setState({
-            withdraw: event.target.value,
-          });
+          let e = event.target.value;
+          //to only allow numbers as  field input
+
+          if (e === "" || Number(e)) {
+            this.setState({
+              withdraw: e,
+            });
+          }
         }
 
         render() {
+          const myStyle = {
+            width: "35rem",
+            textAlign: "center",
+            padding: "12px",
+            margin: "5rem auto",
+            border: "1px solid black",
+          };
           return (
-            <div>
-              <h1>The Balance is {this.state.count}</h1>
+            <div style={myStyle}>
+              <h1>Your Current Balance is {this.state.balance} €</h1>
+
               <input onChange={this.deposit} value={this.state.deposit} />
-              <button onClick={this.increment}>Deposit</button>
+              <button
+                style={{ margin: "10px", padding: "3px" }}
+                onClick={this.increment}
+              >
+                Deposit
+              </button>
               <input onChange={this.withdraw} value={this.state.withdraw} />
-              <button onClick={this.decrement}>Withdraw</button>
+              <button
+                style={{ margin: "4px", padding: "3px" }}
+                onClick={this.decrement}
+              >
+                Withdraw
+              </button>
             </div>
           );
         }
