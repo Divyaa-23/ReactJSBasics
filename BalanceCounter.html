@@ -28,7 +28,6 @@
         constructor(props) {
           super(props);
           this.state = {
-          
             withdraw: "",
             deposit: "",
             balance: 0,
@@ -45,6 +44,7 @@
               balance: parseInt(balance),
             });
           }
+          //put things into local storage
           window.addEventListener("beforeunload", () => {
             localStorage.setItem("balance", this.state.balance);
           });
@@ -56,7 +56,7 @@
             this.setState((state) => ({
               balance: state.balance + parseInt(this.state.deposit),
             }));
-           /*  localStorage.setItem(
+            /*  localStorage.setItem(
               "balance",
               this.state.balance + parseInt(this.state.deposit)
             ); */
@@ -70,7 +70,7 @@
             this.setState((state) => ({
               balance: state.balance - parseInt(this.state.withdraw),
             }));
-          /*   localStorage.setItem(
+            /*   localStorage.setItem(
               "balance",
               this.state.balance - parseInt(this.state.withdraw)
             ); */
