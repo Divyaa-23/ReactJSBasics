@@ -28,7 +28,7 @@
         constructor(props) {
           super(props);
           this.state = {
-            input: "",
+          
             withdraw: "",
             deposit: "",
             balance: 0,
@@ -45,6 +45,9 @@
               balance: parseInt(balance),
             });
           }
+          window.addEventListener("beforeunload", () => {
+            localStorage.setItem("balance", this.state.balance);
+          });
         }
 
         increment = () => {
@@ -53,10 +56,10 @@
             this.setState((state) => ({
               balance: state.balance + parseInt(this.state.deposit),
             }));
-            localStorage.setItem(
+           /*  localStorage.setItem(
               "balance",
               this.state.balance + parseInt(this.state.deposit)
-            );
+            ); */
           } else {
             alert("Input field cannot be empty!!!");
           }
@@ -67,10 +70,10 @@
             this.setState((state) => ({
               balance: state.balance - parseInt(this.state.withdraw),
             }));
-            localStorage.setItem(
+          /*   localStorage.setItem(
               "balance",
               this.state.balance - parseInt(this.state.withdraw)
-            );
+            ); */
           } else {
             alert("Input field cannot be Empty!!!");
           }
