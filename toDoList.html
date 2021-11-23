@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>To Do List</title>
+    <script
+      crossorigin
+      src="https://unpkg.com/react@17/umd/react.development.js"
+    ></script>
+    <script
+      crossorigin
+      src="https://unpkg.com/react-dom@17/umd/react-dom.development.js"
+    ></script>
+    <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="text/babel">
+      let temp = [];
+
+      class App extends React.Component {
+        constructor(props) {
+          super(props);
+          this.state = {
+            item: "",
+            itemCount: 0,
+          };
+
+          this.add = this.add.bind(this);
+          this.addItem = this.addItem.bind(this);
+        }
+
+        componentDidMount() {
+          const ele = localStorage.getItem("item");
+          const count = localStorage.getItem("itemCount");
+          if (ele !== null && count !== null) {
+            this.setState({
+              item: ele,
+              itemCount: parseInt(count),
+            });
+          }
+          window.addEventListener("beforeunload", () => {
+            localStorage.setItem("item", temp);
+
+            localStorage.setItem("itemCount", this.state.itemCount);
+            /*    localStorage.clear()   */
+          });
+        }
+
+        add = () => {
+          temp.push(this.state.item);
+
+          this.setState({
+            item: this.state.item,
+            itemCount: this.state.itemCount + 1,
+          });
+        };
+        delete = (event) => {
+          event.target.parentNode.remove();
+        };
+
+        addItem(event) {
+          let e = event.target.value;
+
+          this.setState({
+            item: e,
+          });
+        }
+
+        render() {
+          const listItems = temp.map((item) => (
+            <li key={item.toString()}>
+              {item} <button onClick={this.delete}>Done</button>{" "}
+            </li>
+          ));
+
+          return (
+            <div>
+              <h1>
+                You have {this.state.item} {this.state.itemCount} Items
+              </h1>
+
+              <ul>{listItems}</ul>
+              <input onChange={this.addItem} value={this.state.item} />
+              <button onClick={this.add}>Add</button>
+            </div>
+          );
+        }
+      }
+
+      ReactDOM.render(<App />, document.getElementById("root"));
+    </script>
+  </body>
+</html>
