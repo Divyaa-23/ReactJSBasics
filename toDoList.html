@@ -18,73 +18,75 @@
   <body>
     <div id="root"></div>
     <script type="text/babel">
-      let temp = [];
-
       class App extends React.Component {
         constructor(props) {
           super(props);
           this.state = {
             item: "",
-            itemCount: 0,
-          };
 
-          this.add = this.add.bind(this);
-          this.addItem = this.addItem.bind(this);
+            toDoList: [],
+          };
         }
 
         componentDidMount() {
-          const ele = localStorage.getItem("item");
-          const count = localStorage.getItem("itemCount");
-          if (ele !== null && count !== null) {
+          const toDoList = JSON.parse(localStorage.getItem("toDoList"));
+          if (toDoList) {
+            /*   console.log("somethingggg"); */
             this.setState({
-              item: ele,
-              itemCount: parseInt(count),
+              toDoList: toDoList,
             });
           }
           window.addEventListener("beforeunload", () => {
-            localStorage.setItem("item", temp);
-
-            localStorage.setItem("itemCount", this.state.itemCount);
-            /*    localStorage.clear()   */
+            localStorage.setItem(
+              "toDoList",
+              JSON.stringify(this.state.toDoList)
+            );
           });
         }
 
-        add = () => {
-          temp.push(this.state.item);
-
-          this.setState({
-            item: this.state.item,
-            itemCount: this.state.itemCount + 1,
-          });
-        };
-        delete = (event) => {
-          event.target.parentNode.remove();
+        addTask = () => {
+          /*  take callback whenever new state depends on old state
+            use obj if new state does not depend on old state */
+          this.setState((state) => ({
+            toDoList: [...state.toDoList, state.item], //add items to toDoList , should not do it by using push methods
+            item: "", //clears typed input in the input field
+          }));
         };
 
-        addItem(event) {
-          let e = event.target.value;
+        removeItem = (event) => {
+          this.setState((state) => {
+            let index = event.target.dataset.index;
 
-          this.setState({
-            item: e,
+            const toDoListCopy = [...state.toDoList];
+            toDoListCopy.splice(index, 1);
+            return { toDoList: toDoListCopy };
           });
-        }
+        };
+
+        //to see input while typing
+        handleChange = (event) => {
+          this.setState({
+            item: event.target.value,
+          });
+        };
 
         render() {
-          const listItems = temp.map((item) => (
-            <li key={item.toString()}>
-              {item} <button onClick={this.delete}>Done</button>{" "}
-            </li>
-          ));
-
           return (
             <div>
-              <h1>
-                You have {this.state.item} {this.state.itemCount} Items
-              </h1>
+              <h1>You have {this.state.toDoList.length} Items</h1>
 
-              <ul>{listItems}</ul>
-              <input onChange={this.addItem} value={this.state.item} />
-              <button onClick={this.add}>Add</button>
+              <ul>
+                {this.state.toDoList.map((item, i) => (
+                  <li key={i}>
+                    {item}
+                    <button data-index={i} onClick={this.removeItem}>
+                      Done
+                    </button>
+                  </li>
+                ))}
+              </ul>
+              <input onChange={this.handleChange} value={this.state.item} />
+              <button onClick={this.addTask}>Add</button>
             </div>
           );
         }
